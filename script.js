@@ -1,4 +1,4 @@
-const gameboard = (function() {
+const Gameboard = function() {
     const boardArr = [[0,0,0],[0,0,0],[0,0,0]];
 
     const mark = (pointer, r, c) => {
@@ -13,11 +13,52 @@ const gameboard = (function() {
         }
     }
 
-    const display = () => console.log(boardArr);
+    const display = () => {
+        boardArr.forEach(row => {
+            console.log(row);
+        });
+    };
 
     return {
         mark,
         display,
         reset
+    }
+};
+
+const Player = (name, marker) => {
+
+    const getName = () => name;
+    const getMarker = () => marker;
+
+    return {
+        getName,
+        getMarker
+    };
+}
+
+const game = (function() {
+    
+    const board = Gameboard();
+
+    const players = [Player("One", "O"), Player("Two","X")];
+
+    let activePlayer = players[0];
+
+    const getActivePlayer = () => activePlayer;
+
+    const switchActivePlayer = () => {
+        activePlayer = activePlayer === players[0]? players[1] : players[0];
+    };
+
+    const playRound = (row, col) => {
+        board.mark(activePlayer.getMarker(), row, col);
+        switchActivePlayer();
+        board.display();
+    }
+
+    return {
+        playRound,
+        getActivePlayer
     }
 })();
