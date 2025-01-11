@@ -5,6 +5,7 @@ const Gameboard = function() {
         boardArr[r][c] = pointer;
     };
 
+    const getBoard = () => boardArr;
     const getCell = (rowIndex,colIndex) => boardArr[rowIndex][colIndex];
     const getRow = (rowIndex) => boardArr[rowIndex];
     const getCol = (colIndex) => [boardArr[0][colIndex], boardArr[1][colIndex], boardArr[2][colIndex]];
@@ -27,6 +28,7 @@ const Gameboard = function() {
 
     return {
         mark,
+        getBoard,
         getCell,
         getRow,
         getCol,
@@ -111,6 +113,7 @@ const Game = (function() {
 
     return {
         playRound,
-        getActivePlayer
+        getActivePlayer,
+        getBoard: board.getBoard
     };
 })();
