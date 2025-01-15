@@ -41,8 +41,9 @@ const Gameboard = function() {
 
 const Player = (name, marker) => {
     let moves = 0;
+    let playerName = name;
 
-    const getName = () => name;
+    const getName = () => playerName;
     const getMarker = () => marker;
     const getMoves = () => moves;
     const addMove = () => moves++;
@@ -84,7 +85,6 @@ const Game = (function() {
         board.mark(activePlayer.getMarker(), row, col);
         activePlayer.addMove();
         totalMoves++;
-        board.display();
 
         // winner logic
         if (activePlayer.getMoves() > 2) {
@@ -116,4 +116,45 @@ const Game = (function() {
         getActivePlayer,
         getBoard: board.getBoard
     };
+})();
+
+const DOMController = (() => {
+    const boardDiv = document.querySelector(".board");
+    const turnDiv = document.querySelector(".turn");
+
+    const updateDOM = () => {
+        const actPlayer = Game.getActivePlayer();
+        turnDiv.textContent = `${actPlayer.getName()}'s turn.. ${actPlayer.getMarker()} to play`;
+
+        boardDiv.innerHTML = '';
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const btn = document.createElement('button');
+                btn.classList.add("btn");
+
+                if (Game.getBoard()[i][j]) {
+                    btn.textContent = Game.getBoard()[i][j];
+                }
+    
+                btn.dataset.row = i;
+                btn.dataset.col = j;
+                boardDiv.appendChild(btn);
+            }
+        }
+    };
+    
+    
+
+    boardDiv.addEventListener('click', (e) => {
+        // if line between buttons is clicked
+        if (e.target.dataset.row === 0) {
+            return;
+        }
+
+        Game.playRound(e.target.dataset.row, e.target.dataset.col);
+        updateDOM();
+    });
+
+    updateDOM();
 })();
