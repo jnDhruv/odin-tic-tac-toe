@@ -47,12 +47,16 @@ const Player = (name, marker) => {
     const getMarker = () => marker;
     const getMoves = () => moves;
     const addMove = () => moves++;
+    const resetMoves = () => {
+        moves = 0;
+    }
 
     return {
         getName,
         getMarker,
         getMoves,
-        addMove
+        addMove,
+        resetMoves
     };
 }
 
@@ -77,8 +81,7 @@ const Game = (function() {
     const playRound = (row, col) => {
         // prevents overwritting a cell if preoccupied cell entered
         if (board.getCell(row,col)) {
-            alert("This cell is already occupied!");
-            return;
+            return 0;
         }
 
         // driver
@@ -97,30 +100,43 @@ const Game = (function() {
                 || matchPattern(board.getAntiDiag(), winningPattern)
             ) {
                 // do something when a player has won
-                alert(`${activePlayer.getName()} won!!`);
-                return;
+                return 1;
             }
         } 
         // draw logic
         if (totalMoves === 9) {
             // do something when tied
-            alert(`Game has ended in a draw!`);
-            return;
+            return -1;
         }
         
         switchActivePlayer();
     };
 
+    const reset = () => {
+        board.reset();
+        totalMoves = 0;
+
+        players.forEach((player) => {
+            player.resetMoves();
+        });
+
+        activePlayer = players[0];
+    }
+
     return {
         playRound,
         getActivePlayer,
-        getBoard: board.getBoard
+        getBoard: board.getBoard,
+        reset
     };
 })();
 
 const DOMController = (() => {
     const boardDiv = document.querySelector(".board");
     const turnDiv = document.querySelector(".turn");
+    const resultDiag = document.querySelector(".result");
+    const resultMsg = resultDiag.querySelector("p");
+    const playAgain = resultDiag.querySelector("button");
 
     const updateDOM = () => {
         const actPlayer = Game.getActivePlayer();
@@ -148,12 +164,27 @@ const DOMController = (() => {
 
     boardDiv.addEventListener('click', (e) => {
         // if line between buttons is clicked
-        if (e.target.dataset.row === 0) {
+        if (!e.target.dataset.row && !e.target.dataset.col) {
             return;
         }
 
-        Game.playRound(e.target.dataset.row, e.target.dataset.col);
+        const result = Game.playRound(e.target.dataset.row, e.target.dataset.col);
         updateDOM();
+        if (result === 1) {
+            const winner = Game.getActivePlayer();
+            resultMsg.textContent = `3 ${winner.getMarker()}'s in a row, ${winner.getName()} wins!!`;
+            resultDiag.showModal();
+        }
+        if (result === -1) {
+            resultMsg.textContent = `It's a tie!`;
+            resultDiag.showModal(); 
+        }   
+    });
+
+    playAgain.addEventListener('click', () => {
+        Game.reset();
+        updateDOM();
+        resultDiag.close();
     });
 
     updateDOM();
