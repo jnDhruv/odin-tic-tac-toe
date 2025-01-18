@@ -12,9 +12,28 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/dialogs.css">
 </head>
 <body>
     <header><h1>tic-tac-toe</h1></header>
+    <dialog class="player-info">
+        <form action="#" method="dialog">
+            <div>
+                <label for="player-one-name">PLAYER 1</label>
+                <input type="text" id="player-one-name" placeholder="Name" required>
+            </div>
+            <div>
+                <label for="player-two-name">PLAYER 2</label>
+                <input type="text" id="player-two-name" placeholder="Name" required>
+            </div>
+            <div class="start">
+                <button type="submit" class="clickBtn">
+                    <img src="icons/tick.svg" alt="tick">
+                    Start
+                </button>
+            </div>
+        </form>
+    </dialog>
     <main>
         <h3 class="turn"></h3>
         <div class="board">
@@ -23,7 +42,7 @@
             <div>
                 <p></p>
                 <div>
-                    <button><img src="icons/playAgain.svg" alt="Reload">Play Again</button>
+                    <button class="clickBtn"><img src="icons/playAgain.svg" alt="Reload">Play Again</button>
                 </div>
             </div>
         </dialog>

@@ -1,12 +1,12 @@
-const Gameboard = function() {
-    const boardArr = [[0,0,0],[0,0,0],[0,0,0]];
+const Gameboard = function () {
+    const boardArr = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 
     const mark = (pointer, r, c) => {
         boardArr[r][c] = pointer;
     };
 
     const getBoard = () => boardArr;
-    const getCell = (rowIndex,colIndex) => boardArr[rowIndex][colIndex];
+    const getCell = (rowIndex, colIndex) => boardArr[rowIndex][colIndex];
     const getRow = (rowIndex) => boardArr[rowIndex];
     const getCol = (colIndex) => [boardArr[0][colIndex], boardArr[1][colIndex], boardArr[2][colIndex]];
     const getDiag = () => [boardArr[0][0], boardArr[1][1], boardArr[2][2]];
@@ -60,10 +60,10 @@ const Player = (name, marker) => {
     };
 }
 
-const Game = (function() {
-    
+const Game = function (playersArr) {
+
     const board = Gameboard();
-    const players = [Player("One", "O"), Player("Two","X")];
+    const players = playersArr;
     let totalMoves = 0;
 
     let activePlayer = players[0];
@@ -71,16 +71,16 @@ const Game = (function() {
     const getActivePlayer = () => activePlayer;
 
     const switchActivePlayer = () => {
-        activePlayer = activePlayer === players[0]? players[1] : players[0];
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
     };
 
-    const matchPattern = (arr1,arr2) => {
+    const matchPattern = (arr1, arr2) => {
         return arr1.join('') == arr2.join('');
     };
 
     const playRound = (row, col) => {
         // prevents overwritting a cell if preoccupied cell entered
-        if (board.getCell(row,col)) {
+        if (board.getCell(row, col)) {
             return 0;
         }
 
@@ -92,8 +92,8 @@ const Game = (function() {
         // winner logic
         if (activePlayer.getMoves() > 2) {
             const marker = activePlayer.getMarker();
-            const winningPattern = [marker,marker,marker];
-            
+            const winningPattern = [marker, marker, marker];
+
             if (matchPattern(board.getRow(row), winningPattern)
                 || matchPattern(board.getCol(col), winningPattern)
                 || matchPattern(board.getDiag(), winningPattern)
@@ -102,13 +102,13 @@ const Game = (function() {
                 // do something when a player has won
                 return 1;
             }
-        } 
+        }
         // draw logic
         if (totalMoves === 9) {
             // do something when tied
             return -1;
         }
-        
+
         switchActivePlayer();
     };
 
@@ -129,17 +129,38 @@ const Game = (function() {
         getBoard: board.getBoard,
         reset
     };
-})();
+};
 
 const DOMController = (() => {
+    const infoDiag = document.querySelector(".player-info");
+    const infoForm = infoDiag.querySelector("form");
+    const playerOneInput = infoForm.querySelector("#player-one-name");
+    const playerTwoInput = infoForm.querySelector("#player-two-name");
+    const infoSubBtn = infoForm.querySelector("button");
+
     const boardDiv = document.querySelector(".board");
     const turnDiv = document.querySelector(".turn");
+
     const resultDiag = document.querySelector(".result");
     const resultMsg = resultDiag.querySelector("p");
     const playAgain = resultDiag.querySelector("button");
 
+    let game;
+
+    infoSubBtn.addEventListener("click", () => {
+        infoForm.submit();
+    })
+
+    infoForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        game = Game([Player(playerOneInput.value, 'O'), Player(playerTwoInput.value, 'X')]);
+        updateDOM();
+        infoForm.reset();
+        infoDiag.close();
+    });
+
     const updateDOM = () => {
-        const actPlayer = Game.getActivePlayer();
+        const actPlayer = game.getActivePlayer();
         turnDiv.textContent = `${actPlayer.getName()}'s turn.. ${actPlayer.getMarker()} to play`;
 
         boardDiv.innerHTML = '';
@@ -149,43 +170,44 @@ const DOMController = (() => {
                 const btn = document.createElement('button');
                 btn.classList.add("btn");
 
-                if (Game.getBoard()[i][j]) {
-                    btn.textContent = Game.getBoard()[i][j];
+                if (game.getBoard()[i][j]) {
+                    btn.textContent = game.getBoard()[i][j];
                 }
-    
+
                 btn.dataset.row = i;
                 btn.dataset.col = j;
                 boardDiv.appendChild(btn);
             }
         }
     };
-    
-    
 
-    boardDiv.addEventListener('click', (e) => {
+    function btnClickHandler(e) {
         // if line between buttons is clicked
         if (!e.target.dataset.row && !e.target.dataset.col) {
             return;
         }
 
-        const result = Game.playRound(e.target.dataset.row, e.target.dataset.col);
+        const result = game.playRound(e.target.dataset.row, e.target.dataset.col);
         updateDOM();
+
         if (result === 1) {
-            const winner = Game.getActivePlayer();
+            const winner = game.getActivePlayer();
             resultMsg.textContent = `3 ${winner.getMarker()}'s in a row, ${winner.getName()} wins!!`;
             resultDiag.showModal();
         }
         if (result === -1) {
             resultMsg.textContent = `It's a tie!`;
-            resultDiag.showModal(); 
-        }   
-    });
+            resultDiag.showModal();
+        }
+    }
+
+    boardDiv.addEventListener('click', btnClickHandler);
 
     playAgain.addEventListener('click', () => {
-        Game.reset();
+        game.reset();
         updateDOM();
         resultDiag.close();
     });
 
-    updateDOM();
+    infoDiag.showModal();
 })();
