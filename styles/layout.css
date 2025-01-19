@@ -11,6 +11,10 @@ button {
     padding: 0;
 }
 
+body {
+    background-color: white;
+}
+
 header {
     text-align: center;
     margin: 10px 0;
@@ -31,6 +35,45 @@ main {
     display: grid;
     grid-template-columns: 100px 100px 100px;
     grid-template-rows: 100px 100px 100px;
+    margin: 10px 0;
+
+    border-radius: 5px;
+    background-color: whitesmoke;
+    user-select: none;
+}
+
+/* setting borders */
+.board .btn{
+    border: 3px solid rgba(0, 0, 0, 0.5);
+    
+    &:nth-child(1) {
+        border-left: none;
+        border-top: none;
+    }
+    &:nth-child(2) {
+        border-top: none;
+    }
+    &:nth-child(3) {
+        border-right: none;
+        border-top: none;
+    }
+    &:nth-child(4) {
+        border-left: none;
+    }
+    &:nth-child(6) {
+        border-right: none;
+    }
+    &:nth-child(7) {
+        border-left: none;
+        border-bottom: none;
+    }
+    &:nth-child(8) {
+        border-bottom: none;
+    }
+    &:nth-child(9) {
+        border-right: none;
+        border-bottom: none;
+    }
 }
 
 .btn {
@@ -38,8 +81,12 @@ main {
     justify-content: center;
     align-items: center;
 
-    font-size: 100%;
+    background-color: transparent;
+
+    font-size: 2rem;
+    font-weight: bold;
     font-family: inherit;
+    cursor: pointer;
 }
 
 .reset {

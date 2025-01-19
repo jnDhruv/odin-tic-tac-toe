@@ -177,6 +177,9 @@ const DOMController = (() => {
                 btn.classList.add("btn");
 
                 if (game.getBoard()[i][j]) {
+                    if (game.getBoard()[i][j] === 'X') {
+                        btn.style.color = '#ef4444';
+                    }
                     btn.textContent = game.getBoard()[i][j];
                 }
 
