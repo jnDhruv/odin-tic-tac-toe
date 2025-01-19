@@ -67,6 +67,7 @@ const Game = function (playersArr) {
     let totalMoves = 0;
 
     let activePlayer = players[0];
+    let firstToMove = players[0];
 
     const getActivePlayer = () => activePlayer;
 
@@ -120,7 +121,8 @@ const Game = function (playersArr) {
             player.resetMoves();
         });
 
-        activePlayer = players[0];
+        activePlayer = firstToMove === players[0] ? players[1] : players[0];
+        firstToMove = activePlayer;
     }
 
     return {
