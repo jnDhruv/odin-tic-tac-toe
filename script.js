@@ -148,7 +148,9 @@ const DOMController = (() => {
     let game;
 
     infoSubBtn.addEventListener("click", () => {
-        infoForm.submit();
+        if (infoForm.isValid()) {
+            infoForm.submit();
+        }
     })
 
     infoForm.addEventListener("submit", (e) => {
