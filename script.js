@@ -138,7 +138,6 @@ const DOMController = (() => {
     const infoForm = infoDiag.querySelector("form");
     const playerOneInput = infoForm.querySelector("#player-one-name");
     const playerTwoInput = infoForm.querySelector("#player-two-name");
-    const infoSubBtn = infoForm.querySelector("button");
 
     const boardDiv = document.querySelector(".board");
     const turnDiv = document.querySelector(".turn");
@@ -150,12 +149,6 @@ const DOMController = (() => {
     const resetBtn = document.querySelector(".reset");
 
     let game;
-
-    infoSubBtn.addEventListener("click", () => {
-        if (infoForm.isValid()) {
-            infoForm.submit();
-        }
-    })
 
     infoForm.addEventListener("submit", (e) => {
         e.preventDefault();
