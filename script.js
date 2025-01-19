@@ -145,6 +145,8 @@ const DOMController = (() => {
     const resultMsg = resultDiag.querySelector("p");
     const playAgain = resultDiag.querySelector("button");
 
+    const resetBtn = document.querySelector(".reset");
+
     let game;
 
     infoSubBtn.addEventListener("click", () => {
@@ -210,6 +212,10 @@ const DOMController = (() => {
         updateDOM();
         resultDiag.close();
     });
+
+    resetBtn.addEventListener('click', () => {
+        infoDiag.showModal();
+    })
 
     infoDiag.showModal();
 })();

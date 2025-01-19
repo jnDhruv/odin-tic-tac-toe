@@ -41,3 +41,8 @@ main {
     font-size: 100%;
     font-family: inherit;
 }
+
+.reset {
+    background-color: #ef4444;
+    margin-top: 20px;
+}
