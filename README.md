@@ -1,5 +1,5 @@
 # Tic-Tac-Toe
-A simple 2-player tic-tac-toe game. [Open Live Preview](https://jnDhruv.github.io/tic-tac-toe)
+A simple 2-player tic-tac-toe game. [Open Live Preview](https://jnDhruv.github.io/odin-tic-tac-toe)
 - Made using HTML, CSS and JavaScript
 
 ## Objective
